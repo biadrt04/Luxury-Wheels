@@ -13,7 +13,7 @@
     }
 
     .hero-section {
-        position: relative; /* importante para que a posição absoluta seja relativa a este container */
+        position: relative;
         background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url("{{ url_for('static', filename='fotos_site/imgcentral.png') }}");
         background-size: cover;
         background-position: center;
@@ -28,10 +28,10 @@
     }
 
     .logo-small {
-        position: absolute; /* permite sobreposição */
-        top: 20px; /* distância do topo da hero-section */
-        left: 1240px; /* distância da esquerda */
-        width: 100px; /* tamanho da imagem */
+        position: absolute;
+        top: 20px;
+        left: 1240px;
+        width: 100px;
         height: auto;
     }
 
@@ -74,13 +74,13 @@
     }
 
 
-    /* Exemplo de como a primeira página apareceria no carregamento da página */
+
         .carros-container .card-carro:nth-child(1),
         .carros-container .card-carro:nth-child(2) {
             display: block;
     }
 
-    /* Estilo para os links de paginação */
+
     .paginacao {
         display: flex;
         justify-content: center;
@@ -97,7 +97,7 @@
     }
 
     .paginacao .pagina-link.ativo {
-        background-color: red; /* Ou a cor que você preferir */
+        background-color: red;
         color: white;
         border-color: red;
     }
@@ -107,7 +107,7 @@
         background-color: #fff;
         border-radius: 10px;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        overflow: hidden; /* Garante que a imagem e os cantos arredondados funcionem */
+        overflow: hidden;
         margin: 15px;
         display: flex;
         flex-direction: column;
@@ -118,7 +118,7 @@
 
     .card-imagem img {
         width: 100%;
-        height: 180px; /* Mantém a proporção da imagem */
+        height: 180px;
         object-fit: cover;
         display: block;
     }
@@ -152,13 +152,12 @@
         font-size: 16px;
         text-align: center;
         text-decoration: none;
-        /* garante que o botão não “vaze” do card */
         align-self: stretch;
     }
 
     .card-rodape {
-        display: flex; /* Alinha os itens em linha */
-        justify-content: space-between; /* Distribui os itens uniformemente */
+        display: flex;
+        justify-content: space-between;
         padding: 15px;
         border-top: 1px solid #eee;
         background-color: #f9f9f9;
@@ -166,7 +165,7 @@
 
     .info-carro {
         display: flex;
-        align-items: center; /* Alinha ícone e texto verticalmente */
+        align-items: center;
         color: #666;
         font-size: 14px;
     }
@@ -224,8 +223,7 @@
     border-radius: 6px;
     border: 1px solid #ccc;
     font-size: 14px;
-    /* Altere de 120px para um valor menor, como 100px ou 110px */
-    width: 100px; /* <--- Mude este valor */
+    width: 100px;
     transition: 0.2s ease;
 }
 
@@ -260,7 +258,7 @@
     transform: scale(1.03);
 }
 
-/* ====== Botão Limpar (link estilizado) ====== */
+/* ====== Botão Limpar ====== */
 .btn-limpar {
     display: inline-block;
     text-decoration: none;
@@ -278,7 +276,7 @@
     transform: scale(1.03);
 }
 
-/* Container da Navegação - Mantemos a centralização */
+/* Container da Navegação */
 .botoes-nav {
     display: flex;
     gap: 30px;
@@ -315,10 +313,9 @@
     background-color: transparent;
 }
 
-/* Faz a mensagem ocupar toda a largura do grid e centralizá-la */
 .mensagem-vazio {
-  grid-column: 1 / -1;   /* ocupa da 1ª à última coluna do grid */
-  justify-self: center;  /* centraliza horizontalmente dentro da área do grid */
+  grid-column: 1 / -1;
+  justify-self: center;
   max-width: 600px;
   width: 80%;
   padding: 50px;
