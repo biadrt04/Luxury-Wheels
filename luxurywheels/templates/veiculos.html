@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Veículos - Luxury Wheels</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&family=Poiret+One&display=swap" rel="stylesheet">
+    <style>
+    body {
+        margin: 0;
+        background-color: #f8f9fa;
+    }
+
+    .hero-section {
+        position: relative; /* importante para que a posição absoluta seja relativa a este container */
+        background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url("{{ url_for('static', filename='fotos_site/imgcentral.png') }}");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        height: 60vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+    }
+
+    .logo-small {
+        position: absolute; /* permite sobreposição */
+        top: 20px; /* distância do topo da hero-section */
+        left: 1240px; /* distância da esquerda */
+        width: 100px; /* tamanho da imagem */
+        height: auto;
+    }
+
+    .hero-section h1 {
+        font-family: 'Cinzel', serif;
+        font-size: 3em;
+        margin: 0;
+    }
+
+    .main-content {
+        padding: 40px 20px;
+        text-align: center;
+    }
+
+    .main-content a {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+    }
+
+    /* fonte */
+    .poiret-one-regular {
+        font-family: "Poiret One", sans-serif;
+        font-weight: 400;
+        font-style: normal;
+    }
+
+    .galeria {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        column-gap: 30px;
+        row-gap: 30px;
+        max-width: 1200px;
+        margin: 24px auto;
+        padding: 0 12px;
+    }
+
+
+    /* Exemplo de como a primeira página apareceria no carregamento da página */
+        .carros-container .card-carro:nth-child(1),
+        .carros-container .card-carro:nth-child(2) {
+            display: block;
+    }
+
+    /* Estilo para os links de paginação */
+    .paginacao {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .paginacao .pagina-link {
+        padding: 10px 15px;
+        margin: 0 5px;
+        border: 1px solid #ccc;
+        text-decoration: none;
+        color: #333;
+        border-radius: 4px;
+    }
+
+    .paginacao .pagina-link.ativo {
+        background-color: red; /* Ou a cor que você preferir */
+        color: white;
+        border-color: red;
+    }
+
+    .card-carro {
+        width: 300px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        overflow: hidden; /* Garante que a imagem e os cantos arredondados funcionem */
+        margin: 15px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+
+
+    .card-imagem img {
+        width: 100%;
+        height: 180px; /* Mantém a proporção da imagem */
+        object-fit: cover;
+        display: block;
+    }
+
+    .card-conteudo {
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .card-titulo {
+        font-size: 24px;
+        font-weight: bold;
+        margin: 0;
+    }
+
+    .card-descricao {
+        font-size: 14px;
+        color: #555;
+        margin-bottom: 15px;
+    }
+
+    .card-botao {
+        background-color: #e53935;
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        text-align: center;
+        text-decoration: none;
+        /* garante que o botão não “vaze” do card */
+        align-self: stretch;
+    }
+
+    .card-rodape {
+        display: flex; /* Alinha os itens em linha */
+        justify-content: space-between; /* Distribui os itens uniformemente */
+        padding: 15px;
+        border-top: 1px solid #eee;
+        background-color: #f9f9f9;
+    }
+
+    .info-carro {
+        display: flex;
+        align-items: center; /* Alinha ícone e texto verticalmente */
+        color: #666;
+        font-size: 14px;
+    }
+
+    .icone-carro {
+        margin-right: 5px;
+    }
+
+    .card-carro.oculto {
+        display: none;
+    }
+
+/* ====== Card principal ====== */
+.filtro-container {
+    display: flex;
+    justify-content: center;
+    margin: 30px auto;
+}
+
+.filtro-card {
+    background-color: #fff6f6;
+    border: 2px solid #d33;
+    border-radius: 10px;
+    padding: 25px 35px ;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 1100px;
+}
+
+/* ====== Título ====== */
+.filtro-card h2 {
+    font-size: 22px;
+    margin-bottom: 20px;
+}
+
+/* ====== Formulário ====== */
+.filtro-card form {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+}
+
+/* ====== Labels e Inputs ====== */
+.filtro-card label {
+    font-weight: 600;
+    margin-right: 5px;
+}
+
+.filtro-card select,
+.filtro-card input[type="text"],
+.filtro-card input[type="number"] {
+    padding: 8px 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    /* Altere de 120px para um valor menor, como 100px ou 110px */
+    width: 100px; /* <--- Mude este valor */
+    transition: 0.2s ease;
+}
+
+.filtro-card select:focus,
+.filtro-card input:focus {
+    outline: none;
+    border-color: #d33;
+}
+
+/* ====== Área dos botões ====== */
+.filtro-botoes {
+  display: flex;
+  gap: 10px;
+}
+
+/* ====== Botão Buscar ====== */
+.filtro-card button {
+    background: #dc3545;
+    color: #fff;
+    border: 1px solid #c9a227;
+    padding: 10px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+
+
+.filtro-card button:hover {
+    background: #b02a37;
+    transform: scale(1.03);
+}
+
+/* ====== Botão Limpar (link estilizado) ====== */
+.btn-limpar {
+    display: inline-block;
+    text-decoration: none;
+    background: #6c757d;
+    color: white;
+    border: 1px solid #c9a227;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.btn-limpar:hover {
+    background: #5a6268;
+    transform: scale(1.03);
+}
+
+/* Container da Navegação - Mantemos a centralização */
+.botoes-nav {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+    position: absolute;
+     bottom: 20px;
+    width: auto;
+    padding: 0;
+    margin-bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* Estilo Base para AMBOS os Botões */
+.bot-nav, .btn-nav-sair {
+    text-decoration: none;
+    padding: 0;
+    border-radius: 0;
+
+    background-color: transparent;
+    color: #ffffff;
+
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+
+    transition: color 0.3s ease;
+    cursor: pointer;
+}
+
+/* Efeito Hover (ao passar o mouse) */
+.bot-nav:hover, .btn-nav-sair:hover {
+    color: #cccccc;
+    background-color: transparent;
+}
+
+/* Faz a mensagem ocupar toda a largura do grid e centralizá-la */
+.mensagem-vazio {
+  grid-column: 1 / -1;   /* ocupa da 1ª à última coluna do grid */
+  justify-self: center;  /* centraliza horizontalmente dentro da área do grid */
+  max-width: 600px;
+  width: 80%;
+  padding: 50px;
+  background: #f8f8f8;
+  border: 1px solid #eee;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+  text-align: center;
+}
+
+
+.mensagem-vazio h3 {
+  color: #333;
+  font-size: 22px;
+  margin-bottom: 10px;
+}
+
+.mensagem-vazio p {
+  color: #666;
+  font-size: 16px;
+}
+.indisponivel {
+  display: inline-block;
+  padding: 10px 16px;
+  background-color: #ccc;
+  color: #fff;
+  font-weight: 600;
+  border-radius: 8px;
+  text-transform: uppercase;
+  cursor: not-allowed;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+}
+.bloqueado {
+  filter: grayscale(100%) brightness(75%);
+  opacity: 0.8;
+  pointer-events: none;
+  position: relative;
+}
+
+.bloqueado-texto {
+  display: inline-block;
+  background: #d1d5db;
+  color: #111827;
+  font-weight: 600;
+  padding: 6px 10px;
+  border-radius: 8px;
+  margin-top: 8px;
+}
+
+.indisponivel {
+  display: inline-block;
+  background: #f87171;
+  color: white;
+  font-weight: bold;
+  padding: 6px 10px;
+  border-radius: 8px;
+}
+.indisponivel {
+    display: inline-block;
+    background: #f8d7da;
+    color: #721c24;
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    text-align: center;
+    margin-top: 5px;
+}
+
+.card-carro.bloqueado {
+    opacity: 0.6;
+    filter: grayscale(70%);
+    pointer-events: none;
+}
+
+
+    </style>
+</head>
+
+
+
+<body>
+<div class="hero-section">
+    <img src="{{ url_for('static', filename='fotos_site/default.png') }}" class="logo-small" alt="Logo Pequeno">
+<h1> Nossos Veículos </h1>
+    <nav class="botoes-nav">
+    <a href="{{url_for ('painel', id_usuario=usuario.id)}}" class="bot-nav">Painel do Cliente</a>
+    <a href="{{url_for ('reservas', usuario_id=usuario.id)}}" class="bot-nav">Minhas Reservas</a>
+    <a href="{{url_for ('logout')}}" class="btn-nav-sair">Sair</a>
+    </nav>
+</div>
+
+
+<!-- Card de Busca -->
+<div class="filtro-container">
+    <div class="card filtro-card">
+    <h2>Buscar Veículos</h2>
+    <form method="GET" action="{{ url_for('veiculos', id_usuario=usuario.id) }}">
+        <!-- Filtro por Marca -->
+        <label for="marca">Marca:</label>
+        <select name="marca" id="marca">
+            <option value="">Todas</option>
+            {% for m in marcas %}
+                <option value="{{ m }}" {% if request.args.get('marca') == m %}selected{% endif %}>
+            {{ m }}
+            </option>
+            {% endfor %}
+        </select>
+
+        <!-- Filtro por Modelo -->
+        <label for="modelo">Modelo:</label>
+        <select name="modelo" id="modelo">
+            <option value="">Modelos</option>
+            {% for modelo in modelos %}
+                <option value="{{ modelo }}" {% if modelo == modelo_selecionado %}selected{% endif %}>
+                    {{ modelo }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <!-- Filtro por Preço Mínimo -->
+        <label for="precomin">Preço mínimo:</label>
+        <input type="number" name="precomin" id="precomin" step="0.01" value="{{ request.args.get('precomin', '') }}" placeholder="80.0">
+
+        <!-- Filtro por Preço Máximo -->
+        <label for="preco">Preço máximo:</label>
+        <input type="number" name="preco" id="preco" step="0.01" value="{{ request.args.get('preco', '') }}" placeholder="350.0">
+
+        <label for="lugares">Quantidade de lugares:</label>
+        <select name="lugares" id="lugares">
+            <option value="">Todos</option>
+            <option value="2">2 lugares</option>
+            <option value="5">5 lugares</option>
+            <option value="7">7 lugares</option>
+        </select>
+
+        <!-- Botões lado a lado -->
+        <div class="filtro-botoes"> <button type="submit">Buscar</button>
+            <a href="{{ url_for('veiculos', id_usuario=usuario.id) }}" class="btn-limpar">Limpar</a>
+        </div>
+
+    </form>
+    </div>
+</div>
+
+<div class="galeria">
+{% if carros %}
+    {% for carro in carros %}
+    <div class="card-carro {% if not tem_acesso(usuario, carro) %}bloqueado{% endif %}">
+        <div class="card-imagem">
+            <img src="{{ url_for('static', filename=carro.foto) }}" alt="{{ carro.marca }} {{ carro.modelo }}">
+        </div>
+        <div class="card-conteudo">
+            <h2 class="card-titulo">{{ carro.marca }} {{ carro.modelo }}</h2>
+            <p class="card-descricao">{{ carro.descricao }}</p>
+            <p class="card-preco">R$ {{ carro.preco_diaria }} / dia</p>
+
+{% set uc = usuario.categoria|lower %}
+{% set cc = carro.categoria|lower %}
+
+{% if carro.disponivel %}
+    {% if uc == "gold" or (uc == "silver" and cc in ["silver", "econômico"]) or (uc == "econômico" and cc == "econômico") %}
+        <a href="{{ url_for('alugar', carro_id=carro.id, usuario_id=usuario.id) }}" class="card-botao">Alugar</a>
+    {% else %}
+        <span class="indisponivel">Disponível apenas para categoria {{ carro.categoria }}</span>
+    {% endif %}
+{% else %}
+    {% if carro.status() == "manutencao" %}
+        <span class="indisponivel">Em manutenção</span>
+    {% else %}
+        <span class="indisponivel">Indisponível</span>
+    {% endif %}
+{% endif %}
+        </div>
+
+        <div class="card-rodape">
+            <div class="info-carro"><span class="icone-carro">👥</span><span>{{ carro.quantidade_lugares }} lugares</span></div>
+            <div class="info-carro"><span class="icone-carro">🛣️</span><span>34.000 KM</span></div>
+            <div class="info-carro"><span class="icone-carro">⚙️</span><span>Auto</span></div>
+        </div>
+    </div>
+    {% endfor %}
+{% else %}
+    <div class="mensagem-vazio">
+        <h3>Ops! Nenhum veículo encontrado com esses filtros.</h3>
+        <p>Tente mudar a média de preço.</p>
+    </div>
+{% endif %}
+</div>
+
+
+{% if carros and total_paginas > 1 %}
+    <div class="paginacao">
+        {% for i in range(1, total_paginas + 1) %}
+            <a href="#"
+               class="pagina-link
+                      {% if i == 1 %}ativo{% endif %}" data-pagina="{{ i }}">
+                {{ i }}
+            </a>
+        {% endfor %}
+    </div>
+{% endif %}
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const galeria = document.querySelector('.galeria');
+        const cards = document.querySelectorAll('.card-carro');
+        const linksPagina = document.querySelectorAll('.pagina-link');
+        const cardsPorPagina = 4; // Número de cards por página
+
+        // Função para mostrar os cards da página selecionada
+        const mostrarPagina = (pagina) => {
+            const inicio = (pagina - 1) * cardsPorPagina;
+            const fim = inicio + cardsPorPagina;
+
+            cards.forEach((card, index) => {
+                card.classList.add('oculto');
+
+                // Remove a classe 'oculto' apenas para os cards da página atual
+                if (index >= inicio && index < fim) {
+                    card.classList.remove('oculto');
+                }
+            });
+        };
+
+        // Adiciona um evento de clique para cada link de paginação
+        linksPagina.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault(); // Evita que a página recarregue
+                const pagina = parseInt(link.dataset.pagina);
+
+                // Remove a classe 'ativo' de todos os links e adiciona ao clicado
+                linksPagina.forEach(l => l.classList.remove('ativo'));
+                link.classList.add('ativo');
+
+                mostrarPagina(pagina);
+            });
+        });
+
+        // Mostra a primeira página ao carregar a página
+        mostrarPagina(1);
+    });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const marcaSelect = document.getElementById('marca');
+        const modeloSelect = document.getElementById('modelo');
+
+        if (!marcaSelect || !modeloSelect) {
+            console.error("ERRO: Elementos 'marca' ou 'modelo' não encontrados.");
+            return; // Interrompe se os elementos não existirem
+        }
+
+        marcaSelect.addEventListener('change', function() {
+            const marcaSelecionada = this.value;
+            console.log("Marca selecionada:", marcaSelecionada);
+
+            // 1. Limpa o select de modelos
+            modeloSelect.innerHTML = '<option value="">Modelos</option>';
+
+            if (marcaSelecionada) {
+                // Monta a URL da rota API
+                const url = `/api/modelos/${marcaSelecionada}`;
+                console.log("Chamando URL:", url);
+
+                fetch(url)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Falha na resposta da API.');
+                        }
+                        return response.json();
+                    })
+                    .then(modelos => {
+                        console.log("Modelos recebidos:", modelos);
+
+                        // 3. Popula o select de modelos com as novas opções
+                        if (modelos && modelos.length > 0) {
+                            modelos.forEach(modelo => {
+                                const option = document.createElement('option');
+                                option.value = modelo;
+                                option.textContent = modelo;
+                                modeloSelect.appendChild(option);
+                            });
+                        } else {
+                            console.log("Nenhum modelo encontrado para esta marca.");
+                        }
+                    })
+                    .catch(error => {
+                        console.error('ERRO na requisição AJAX:', error);
+                    });
+            }
+        });
+    });
+</script>
+</body>
+</html>

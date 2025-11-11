@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Reservas - Luxury Wheels</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+    font-family: 'Poppins', sans-serif;
+    background: #f4f6f9;
+    margin: 0;
+    padding: 20px;
+    color: #333;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #111827;
+}
+
+.reserva-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+    padding: 20px;
+    margin-bottom: 25px;
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+.reserva-card img {
+    width: 220px;
+    border-radius: 10px;
+}
+
+.reserva-info {
+    flex: 1;
+}
+
+.reserva-info h2 {
+    margin-top: 0;
+    color: #1f2937;
+}
+
+.reserva-info p {
+    margin: 6px 0;
+}
+
+.buttons {
+    margin-top: 15px;
+    gap: 10px;
+}
+
+.btn {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+    flex: 1;
+    margin-right: 8px;
+}
+
+.btn-cancel {
+    background: #f87171;
+}
+.btn-cancel:hover {
+    background: #dc2626;
+}
+
+.btn-edit {
+    background: #60a5fa;
+}
+.btn-edit:hover {
+    background: #2563eb;
+}
+
+/* Removemos o margin-top global que atrapalhava */
+a {
+    text-decoration: none;
+    color: #2563eb;
+    font-weight: 600;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+    .reserva-card {
+        flex-direction: column;
+        text-align: center;
+    }
+    .reserva-card img {
+        margin: 0 auto;
+    }
+    .buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        align-items: center;
+    }
+}
+
+/* Estilos dos flashes */
+.flash {
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-weight: 500;
+  text-align: left;
+  /* Fundo transparente para todas as mensagens flash */
+  background-color: transparent;
+  /* Cor do texto padrão para todas as mensagens flash (visível em fundo claro) */
+  color: #333;
+}
+
+/* vermelho: Apenas texto */
+.flash-danger {
+  /* REMOVIDO: background-color: #ffdddd; */
+  /* Mantém o texto vermelho, mas sem borda e sem fundo */
+  color: #b30000;
+  /* REMOVIDO: border: 1px solid #ff4d4d; */
+}
+
+/* verde: Apenas texto */
+.flash-success {
+  color: #1a7f37;
+  background: transparent;
+  border: none;
+}
+
+
+/* azul: Apenas texto */
+.flash-info {
+  /* REMOVIDO: background-color: #dbeeff; */
+  /* Mantém o texto azul, mas sem borda e sem fundo */
+  color: #004085;
+  /* REMOVIDO: border: 1px solid #b8daff; */
+}
+/* HEADER COM BOTÃO DIREITO */
+.header-reservas a,
+.header-reservas .link-voltar {
+  margin-top: 0 !important;
+  display: inline-block;
+}
+
+.header-reservas {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 18px 30px;
+  box-sizing: border-box;
+  background: #f4f6f9;
+}
+
+.header-reservas h1 {
+  margin: 0;
+  flex: 1;
+  text-align: center;
+  color: #111827;
+}
+
+.header-reservas .link-voltar {
+  position: absolute;
+  right: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+  text-decoration: none;
+  color: #2563eb;
+  font-weight: 600;
+  padding: 6px 10px;
+  border-radius: 8px;
+  z-index: 20;
+}
+
+.header-reservas .link-voltar:hover {
+  background: rgba(37,99,235,0.08);
+}
+
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header-reservas">
+    <h1> Minhas Reservas </h1>
+    <a href="{{ url_for('veiculos', id_usuario=usuario.id) }}" class="link-voltar">Voltar para o Ínicio</a>
+</div>
+
+{% with global_messages = get_flashed_messages(with_categories=true) %}
+    {% if global_messages %}
+        {% for category, message in global_messages %}
+            {% if not category.startswith('danger-') and not category == 'info' %}
+                <div class="flash flash-{{ category }}">{{ message }}</div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+{% if reservas %}
+    {% for reserva in reservas %}
+
+            <div class="reserva-card">
+                <img src="{{ url_for('static', filename=reserva.veiculo.foto) }}" alt="{{ reserva.veiculo.marca }}" style="max-width:200px;">
+
+                <div class="reserva-info">
+                    <h2>{{ reserva.veiculo.marca }} - {{ reserva.veiculo.modelo }}</h2>
+                    <p><strong>Data Início:</strong> {{ reserva.data_inicio.strftime("%d/%m/%Y") }}</p>
+                    <p><strong>Data Fim:</strong> {{ reserva.data_fim.strftime("%d/%m/%Y") }}</p>
+                    <p><strong>Valor Total: R$ {{ reserva.valor_total }} </strong></p>
+                    <p><strong>Forma de Pagamento: {{ reserva.forma_pagamento }}</strong></p>
+                    <p><strong>Status da Reserva: {{ reserva.status }} </strong></p>
+                    <p><strong>Status do Pagamento: {{ reserva.status_pagamento }} </strong></p>
+
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                    {% for category, message in messages %}
+                    {% if category == "danger-" ~ reserva.id|string %}
+                        <div class="flash flash-danger">{{ message }}</div>
+                    {% endif %}
+                    {% endfor %}
+                    {% endif %}
+                    {% endwith %}
+
+                    <div class="buttons">
+                        <form action="{{ url_for('cancelar_reserva', reserva_id=reserva.id, usuario_id=usuario.id) }}" method="POST" style="display:inline;">
+                            <button type="submit" class="btn btn-cancel"
+                        onclick="return confirm('Tem certeza que deseja cancelar sua reserva?')">Cancelar Reserva</button>
+                        </form>
+
+                        <form action="{{ url_for('alterar_reserva', reserva_id=reserva.id, usuario_id=usuario.id) }}" method="GET" style="display:inline;">
+                            <button type="submit" class="btn btn-edit">Alterar Reserva</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+    {% endfor %}
+{% else %}
+    <p style="text-align: center; margin-top: 50px; font-size: 1.2em; color: #555;">
+        Você ainda não possui nenhuma reserva.
+    </p>
+{% endif %}
+
+<script>
+  // Espera a página carregar
+  document.addEventListener("DOMContentLoaded", function() {
+    // Seleciona todas as mensagens flash
+    const flashes = document.querySelectorAll(".flash");
+
+    // Faz cada uma desaparecer após 3 segundos (3000ms)
+    flashes.forEach((flash) => {
+      setTimeout(() => {
+        flash.style.transition = "opacity 0.8s ease"; // animação suave
+        flash.style.opacity = "0"; // começa a sumir
+
+        // Remove o elemento do DOM depois da animação
+        setTimeout(() => flash.remove(), 800);
+      }, 5000); // tempo que ela fica visível antes de sumir
+    });
+  });
+</script>
+
+
+</body>
+</html>

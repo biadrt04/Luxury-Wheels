@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Painel do Cliente - Luxury Wheels</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f4f6f9;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        header {
+            background: #111827;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+        .link-container {
+    display: flex;
+    justify-content: center; /* centraliza horizontalmente */
+    margin-top: 15px;        /* espaço abaixo do header */
+    margin-bottom: 10px;
+}
+
+.link-voltar {
+    text-decoration: none;
+    background: #f9fafb;
+    color: #2563eb;
+    font-weight: 600;
+    padding: 10px 16px;
+    border-radius: 8px;
+    transition: 0.3s;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+}
+
+.link-voltar:hover {
+    background: #2563eb;
+    color: #fff;
+}
+        .container {
+            max-width: 800px;
+            margin: 30px auto;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+
+        h2 {
+            margin-top: 0;
+            color: #1f2937;
+        }
+
+        .info-box {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .info-box h3 {
+            color: #1e40af;
+            margin-bottom: 10px;
+        }
+
+        .info-box p {
+            margin: 5px 0;
+        }
+
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        table th, table td {
+            border: 1px solid #e5e7eb;
+            padding: 12px;
+            text-align: center;
+        }
+
+        table th {
+            background-color: #f3f4f6;
+            color: #111827;
+        }
+
+        table td {
+            background-color: #fff;
+        }
+
+        .categoria {
+            display: inline-block;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .gold { background: #facc15; color: #78350f; }
+        .silver { background: #9ca3af; color: #1f2937; }
+        .economico { background: #6ee7b7; color: #064e3b; }
+
+        button {
+            background: #dc2626;
+            color: #fff;
+            border: none;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #1e40af;
+        }
+    .botao-editar {
+    display: inline-block;
+    background-color: #ffffff;
+    color: #2563eb; /* azul do texto */
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    border: 1px solid #2563eb;
+    transition: 0.3s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    margin-top: 10px;
+}
+
+.botao-editar:hover {
+    background-color: #2563eb;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.footer {
+    background: #111417;
+    color: #ccc;
+    padding: 60px 10%;
+    border-top: 3px solid #b20020;
+    display: flex;
+    justify-content: center;
+    font-family: 'Poppins', sans-serif;
+}
+
+.footer-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1200px;
+}
+
+.footer-logo {
+    max-width: 45%;
+}
+
+.footer-logo img {
+    width: 90px;
+    margin-bottom: 15px;
+}
+
+.footer-logo p {
+    font-size: 15px;
+    line-height: 1.6;
+    color: #bbb;
+    margin-bottom: 20px;
+}
+
+.social-icons a {
+    color: #fff;
+    background: #222;
+    padding: 10px;
+    border-radius: 50%;
+    margin-right: 10px;
+    display: inline-block;
+    transition: all 0.3s ease;
+    font-size: 14px;
+}
+
+.social-icons a:hover {
+    background: #b20020;
+}
+
+.footer-contact {
+    max-width: 40%;
+}
+
+.footer-contact h3 {
+    color: #fff;
+    font-weight: 600;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #b20020;
+    display: inline-block;
+    padding-bottom: 5px;
+}
+
+.contact-item {
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    font-size: 15px;
+    color: #ddd;
+}
+
+.contact-item i {
+    color: #b20020;
+    margin-right: 10px;
+    font-size: 16px;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+    .footer-container {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    .footer-logo, .footer-contact {
+        max-width: 100%;
+    }
+    .social-icons {
+        margin-top: 10px;
+    }
+}
+
+    </style>
+
+</head>
+
+<body>
+<header>
+    <h1>Painel do Cliente</h1>
+</header>
+
+<div class="link-container">
+    <a href="{{ url_for('veiculos', id_usuario=usuario.id) }}" class="link-voltar">Voltar para o Início</a>
+</div>
+
+<div class="container">
+    <div class="info-box">
+        <h3>Informações do Cliente</h3>
+        <p><strong>Nome:</strong> {{ usuario.username }}</p>
+        <p><strong>Email:</strong> {{ usuario.email }}</p>
+        <p><strong>Telefone:</strong> {{ usuario.telefone }}</p>
+        <p><strong>Categoria:</strong>
+            {% if usuario.categoria == 'gold' %}
+                <span class="categoria gold">Gold</span>
+            {% elif usuario.categoria == 'silver' %}
+                <span class="categoria silver">Silver</span>
+            {% else %}
+                <span class="categoria economico">Econômico</span>
+            {% endif %}
+        </p>
+        <a href="{{ url_for('editar_perfil', id_usuario=usuario.id) }}" class="botao-editar">
+            Editar Informações
+        </a>
+
+    </div>
+</div>
+
+<footer class="footer">
+    <div class="footer-container">
+        <div class="footer-logo">
+            <img src="{{ url_for('static', filename='fotos_site/default.png') }}" alt="Luxury Wheels Logo">
+            <p>
+                A <strong>Luxury Wheels</strong> proporciona experiências únicas de luxo sobre rodas.
+                Alugue carros de alto padrão com conforto, exclusividade e segurança.
+            </p>
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+            </div>
+        </div>
+
+        <div class="footer-contact">
+            <h3>Contacte-nos</h3>
+            <div class="contact-item">
+                <i class="fas fa-map-marker-alt"></i>
+                <span>João Pessoa, Brasil</span>
+            </div>
+            <div class="contact-item">
+                <i class="fas fa-envelope"></i>
+                <span>luxurywheels@site.com</span>
+            </div>
+            <div class="contact-item">
+                <i class="fas fa-phone"></i>
+                <span>+55 (83) 9 9000-0000</span>
+            </div>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>

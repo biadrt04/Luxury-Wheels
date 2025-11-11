@@ -1,0 +1,72 @@
+{% extends "login.html" %}
+
+{% block titulo %}
+        Registrar-se - Luxury Weels
+        {% endblock %}
+
+
+{% block formulario %}
+<form method="POST">
+    {{ form.csrf_token }}
+    <div style="margin-bottom: 10px;">
+    {{ form.email.label() }}
+    {{ form.email() }}
+    </div>
+
+    <div style="margin-bottom: 10px;">
+    {{ form.username.label() }}
+    {{ form.username() }}
+    </div>
+
+    <div style="margin-bottom: 10px;">
+    {{ form.telefone.label() }}
+    {{ form.telefone(class="form-control", id="telefone") }}
+    </div>
+
+    <div style="margin-bottom: 10px;">
+    {{ form.senha.label() }}
+    {{ form.senha() }}
+    </div>
+
+    <div style="margin-bottom: 10px;">
+    {{ form.confirmacao_senha.label() }}
+    {{ form.confirmacao_senha() }}
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="flash flash-{{ category }}" role="alert">
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+    <div style="margin-bottom: 15px;">
+    {{ form.botao_confirmacao() }}
+    </div>
+
+    <a href=" {{ url_for('login') }} ">Já possui conta? Faça Login.</a>
+</form>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const telefoneInput = document.getElementById("telefone");
+    telefoneInput.addEventListener("input", function(e) {
+      let valor = e.target.value.replace(/\D/g, "");
+      if (valor.length > 11) valor = valor.slice(0, 11);
+
+      if (valor.length > 6) {
+        e.target.value = `(${valor.slice(0,2)}) ${valor.slice(2,7)}-${valor.slice(7)}`;
+      } else if (valor.length > 2) {
+        e.target.value = `(${valor.slice(0,2)}) ${valor.slice(2)}`;
+      } else {
+        e.target.value = valor;
+      }
+    });
+  });
+</script>
+{% endblock %}

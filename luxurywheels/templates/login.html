@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Luxury Wheels</title>
+    <style>
+        body {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("{{ url_for('static', filename='fotos_site/default.png') }}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh;
+        }
+        .login-form {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 400px;
+            margin: 100px auto;
+        }
+        .logo-menor {
+            display: block;
+            margin: 0 auto;
+            width: 180px;
+            height: auto;
+        }
+.flash {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  margin: 8px 0;
+  text-align: center;
+}
+
+/* Apenas o texto colorido */
+.flash-success {
+  color: #28a745; /* verde */
+}
+
+.flash-danger {
+  color: #dc3545; /* vermelho */
+}
+
+.flash-warning {
+  color: #ffc107; /* amarelo */
+}
+
+.flash-info {
+  color: #0dcaf0; /* azul */
+}
+
+    </style>
+</head>
+
+<body>
+
+<div class="login-form">
+    <img src="{{ url_for('static', filename='fotos_site/default.png') }}" alt="Logo Menor" class="logo-menor">
+
+    <h2 style="text-align: center;" >- Iniciar Sessão </h2>
+
+
+
+{% block formulario %}
+<form method="POST" action="{{ url_for('login') }}" style="text-align: center;">
+  {{ form.csrf_token }}
+
+    <div style="margin-bottom: 10px;">
+    {{ form.email.label() }}
+    {{ form.email() }}
+    </div>
+
+    <div style="margin-bottom: 10px;">
+    {{ form.senha.label() }}
+    {{ form.senha() }}
+    </div>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="flash flash-{{ category }}" role="alert">
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+    <div style="margin-bottom: 15px;">
+    {{ form.botao_confirmacao() }}
+    </div>
+
+
+    <h4> Ainda não possui conta? </h4>
+<a href=" {{ url_for('registro') }} "> Registrar-se </a>
+</form>
+</div>
+{% endblock %}
+{% block scripts %} {% endblock %}
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

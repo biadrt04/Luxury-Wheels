@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Efetuar Aluguel - Luxury Wheels</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f4f6f9;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        header {
+            background: #111827;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 30px auto;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+
+        h2 {
+            margin-top: 0;
+            color: #1f2937;
+        }
+
+        .car-info {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .car-info img {
+            max-width: 100%;
+            border-radius: 12px;
+            margin: 15px 0;
+        }
+
+        form {
+            display: grid;
+            gap: 15px;
+        }
+
+        label {
+            font-weight: 600;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        button {
+            background: #dc2626;
+            color: #fff;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #1e40af;
+        }
+
+        .valor-total {
+            font-size: 18px;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .alert {
+            padding: 12px;
+            margin-top: 10px;
+            border-radius: 6px;
+        }
+        .alert-danger { background: #fee2e2; color: #991b1b; }
+        .alert-success { background: #dcfce7; color: #166534; }
+    </style>
+</head>
+
+<body>
+<h2>
+    Efetuar Aluguel
+</h2>
+
+<div class="container">
+    <div class="car-info">
+        <h1>{{ carro.marca }} {{ carro.modelo }}</h1>
+        <img src="{{ url_for('static', filename=carro.foto) }}" alt="{{ carro.marca }}">
+        <p>{{ carro.descricao }}</p>
+        <p>Preço por dia: R$ {{ carro.preco_diaria }}</p>
+
+        <h5>Última revisão: {{ carro.data_ultima_revisao }}</h5>
+        <h5>Próxima revisão: {{ carro.data_proxima_revisao }}</h5>
+        <h5>Última inspeção: {{ carro.data_ultima_inspecao }}</h5>
+
+    </div>
+    <form method="POST">
+
+    <label>Informações Pessoais</label>
+
+    <label>Nome</label>
+    <input type="text" id="nome" name="nome" value="{{ reserva.nome if reserva else '' }}" required>
+
+    <label>Telefone</label>
+    <input type="text" id="telefone" name="telefone" pattern="\(\d{2}\)\s?\d{4,5}-\d{4}" placeholder="(00)00000-0000" value="{{ reserva.telefone if reserva else '' }}" required>
+
+    <label>CPF</label>
+    <input type="text" id="cpf" name="cpf" pattern="\d{3}\.\d{3}\.\d{3}-\d{2}" placeholder="000.000.000-00" value="{{ reserva.cpf if reserva else '' }}" required>
+
+    <label>E-mail</label>
+    <input type="email" id="email" name="email" value="{{ reserva.email if reserva else '' }}" required>
+
+    <label>CEP</label>
+    <input type="text" id="cep" name="cep" pattern="\d{5}-\d{3}" placeholder="00000-000" value="{{ reserva.cep if reserva else '' }}" required>
+
+    <label>Data de Início:</label>
+    <input type="date" id="inicio" name="inicio" value="{{ reserva.data_inicio.strftime('%Y-%m-%d') if reserva else '' }}" required>
+
+    <label>Data de Fim:</label>
+    <input type="date" id="fim" name="fim" value="{{ reserva.data_fim.strftime('%Y-%m-%d') if reserva else '' }}" required>
+
+    <label>Forma de Pagamento:</label>
+    <select name="forma_pagamento" required>
+        <option value="Pix" {{ 'selected' if reserva and reserva.forma_pagamento == 'Pix' else '' }}>Pix</option>
+        <option value="Cartão de Débito" {{ 'selected' if reserva and reserva.forma_pagamento == 'Cartão de Débito' else '' }}>Cartão de Débito</option>
+        <option value="Cartão de Crédito" {{ 'selected' if reserva and reserva.forma_pagamento == 'Cartão de Crédito' else '' }}>Cartão de Crédito</option>
+        <option value="Boleto" {{ 'selected' if reserva and reserva.forma_pagamento == 'Boleto' else '' }}>Boleto</option>
+    </select>
+
+
+
+   <p><strong>Valor Total:</strong> R$ <span id="valor_total">{{ reserva.valor_total if reserva else '0,00' }}</span></p>
+
+  <button type="submit">Confirmar Aluguel</button>
+
+</form>
+</div>
+<script>
+function aplicarMascara(input, tipo) {
+    input.addEventListener('input', function(e) {
+        let valor = e.target.value.replace(/\D/g, "");
+
+        if (tipo === "telefone") {
+            if (valor.length > 11) valor = valor.slice(0, 11);
+            if (valor.length > 10) {
+                e.target.value = `(${valor.slice(0,2)}) ${valor.slice(2,7)}-${valor.slice(7,11)}`;
+            } else if (valor.length > 6) {
+                e.target.value = `(${valor.slice(0,2)}) ${valor.slice(2,6)}-${valor.slice(6,10)}`;
+            } else if (valor.length > 2) {
+                e.target.value = `(${valor.slice(0,2)}) ${valor.slice(2)}`;
+            } else {
+                e.target.value = valor;
+            }
+        }
+
+        if (tipo === "cpf") {
+            if (valor.length > 11) valor = valor.slice(0, 11);
+            if (valor.length > 9) {
+                e.target.value = `${valor.slice(0,3)}.${valor.slice(3,6)}.${valor.slice(6,9)}-${valor.slice(9,11)}`;
+            } else if (valor.length > 6) {
+                e.target.value = `${valor.slice(0,3)}.${valor.slice(3,6)}.${valor.slice(6,9)}`;
+            } else if (valor.length > 3) {
+                e.target.value = `${valor.slice(0,3)}.${valor.slice(3,6)}`;
+            } else {
+                e.target.value = valor;
+            }
+        }
+
+        if (tipo === "cep") {
+            if (valor.length > 8) valor = valor.slice(0, 8);
+            if (valor.length > 5) {
+                e.target.value = `${valor.slice(0,5)}-${valor.slice(5,8)}`;
+            } else {
+                e.target.value = valor;
+            }
+        }
+    });
+}
+
+// Ativa as máscaras nos campos
+aplicarMascara(document.getElementById('telefone'), "telefone");
+aplicarMascara(document.getElementById('cpf'), "cpf");
+aplicarMascara(document.getElementById('cep'), "cep");
+</script>
+<script>
+  // Bloqueia datas anteriores ao dia atual
+  const hoje = new Date().toISOString().split("T")[0];
+  const dataInicio = document.getElementById("inicio");
+  const dataFim = document.getElementById("fim");
+
+
+  dataInicio.min = hoje;
+  dataFim.min = hoje;
+
+  // Quando o usuário escolhe a data de início:
+  dataInicio.addEventListener("change", function() {
+    const inicio = dataInicio.value;
+
+    dataFim.min = inicio;
+
+    // Se a data de fim for anterior à nova data de início, limpa o campo
+    if (dataFim.value < inicio) {
+      dataFim.value = "";
+    }
+  });
+</script>
+<script>
+  const precoPorDia = {{ carro.preco_diaria }};
+  const inicioInput = document.getElementById("inicio");
+  const fimInput = document.getElementById("fim");
+  const valorTotalSpan = document.getElementById("valor_total");
+
+  function calcularValor() {
+    const inicio = new Date(inicioInput.value);
+    const fim = new Date(fimInput.value);
+
+    if (inicio && fim && fim >= inicio) {
+      const diffTime = fim - inicio;
+      const diffDays = diffTime / (1000 * 60 * 60 * 24); // diferença em dias
+      const total = diffDays * precoPorDia;
+      valorTotalSpan.textContent = total.toLocaleString("pt-BR", { minimumFractionDigits: 2 });
+    } else {
+      valorTotalSpan.textContent = "0,00";
+    }
+  }
+
+  inicioInput.addEventListener("change", calcularValor);
+  fimInput.addEventListener("change", calcularValor);
+
+</script>
+</body>
+</html>
